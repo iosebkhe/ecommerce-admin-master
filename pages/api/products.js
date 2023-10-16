@@ -10,7 +10,7 @@ const corsOptions = {
 export default async function handle(req, res) {
 
   // Apply the CORS middleware
-  await cors(corsOptions)(req, res);
+  cors(corsOptions)(req, res);
 
   const { method } = req;
   await mongooseConnect();
