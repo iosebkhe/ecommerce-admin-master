@@ -1,8 +1,17 @@
 import { Product } from "@/models/Product";
 import { mongooseConnect } from "@/lib/mongoose";
 import { isAdminRequest } from "@/pages/api/auth/[...nextauth]";
+import cors from "cors";
+
+const corsOptions = {
+  origin: '*', // Update this with the origins you want to allow or '*' to allow any origin.
+};
 
 export default async function handle(req, res) {
+
+  // Apply the CORS middleware
+  await cors(corsOptions)(req, res);
+
   const { method } = req;
   await mongooseConnect();
   // await isAdminRequest(req,res);
