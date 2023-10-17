@@ -6,8 +6,8 @@ import axios from "axios";
 export default function DeleteProductPage() {
   const router = useRouter();
   const [productInfo, setProductInfo] = useState();
-  const id = router.query.id;
-  const prId = id[0];
+  const prId = router.query.id?.[0];
+
   useEffect(() => {
     if (!prId) {
       return;
