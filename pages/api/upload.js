@@ -4,6 +4,7 @@ import fs from 'fs';
 import mime from 'mime-types';
 import { mongooseConnect } from "@/lib/mongoose";
 import { isAdminRequest } from "@/pages/api/auth/[...nextauth]";
+
 const bucketName = 'raywood';
 
 export default async function handle(req, res) {
@@ -17,7 +18,6 @@ export default async function handle(req, res) {
       resolve({ fields, files });
     });
   });
-  console.log('length:', files.file.length);
 
   const client = new S3Client({
     region: 'eu-central-1',

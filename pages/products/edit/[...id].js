@@ -1,27 +1,28 @@
 import Layout from "@/components/Layout";
-import {useRouter} from "next/router";
-import {useEffect, useState} from "react";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import ProductForm from "@/components/ProductForm";
 
 export default function EditProductPage() {
-  const [productInfo, setProductInfo] = useState(null);
   const router = useRouter();
-  const {id} = router.query;
+  const prId = router.query.id?.[0];
+
+  const [productInfo, setProductInfo] = useState(null);
+
   useEffect(() => {
-    if (!id) {
-      return;
+    if (prId) {
+      axios.get(`/api/products?id=${prId}`).then(response => {
+        const product = response.data.find(product => product._id === prId);
+        setProductInfo(product);
+      });
     }
-    axios.get('/api/products?id='+id).then(response => {
-      setProductInfo(response.data);
-    });
-  }, [id]);
+  }, [prId]);
+
   return (
     <Layout>
       <h1>Edit product</h1>
-      {productInfo && (
-        <ProductForm {...productInfo} />
-      )}
+      {productInfo && <ProductForm {...productInfo} assignedCategories={productInfo.categories} />}
     </Layout>
   );
 }

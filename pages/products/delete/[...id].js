@@ -1,40 +1,42 @@
 import Layout from "@/components/Layout";
-import {useRouter} from "next/router";
-import {useEffect, useState} from "react";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 import axios from "axios";
 
 export default function DeleteProductPage() {
   const router = useRouter();
-  const [productInfo,setProductInfo] = useState();
-  const {id} = router.query;
+  const [productInfo, setProductInfo] = useState();
+  const id = router.query.id;
+  const prId = id[0];
   useEffect(() => {
-    if (!id) {
+    if (!prId) {
       return;
     }
-    axios.get('/api/products?id='+id).then(response => {
-      setProductInfo(response.data);
+    axios.get('/api/products?id=' + prId).then(response => {
+      const product = response.data.find(product => product._id === prId);
+      setProductInfo(product);
     });
-  }, [id]);
+  }, [prId]);
   function goBack() {
     router.push('/products');
   }
   async function deleteProduct() {
-    await axios.delete('/api/products?id='+id);
+    await axios.delete('/api/products?id=' + id);
     goBack();
   }
   return (
     <Layout>
-      <h1 className="text-center">Do you really want to delete
+      <h1 className="text-center">გსურთ წაშალოთ
         &nbsp;&quot;{productInfo?.title}&quot;?
       </h1>
       <div className="flex gap-2 justify-center">
         <button
           onClick={deleteProduct}
-          className="btn-red">Yes</button>
+          className="btn-red">წაშლა</button>
         <button
           className="btn-default"
           onClick={goBack}>
-          NO
+          უკან დაბრუნება
         </button>
       </div>
     </Layout>

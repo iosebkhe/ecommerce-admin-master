@@ -1,40 +1,55 @@
 import { Product } from "@/models/Product";
+import { Category } from "@/models/Category";
 import { mongooseConnect } from "@/lib/mongoose";
 import { isAdminRequest } from "@/pages/api/auth/[...nextauth]";
-// import cors from "cors";
-
-const corsOptions = {
-  origin: '*', // Update this with the origins you want to allow or '*' to allow any origin.
-};
 
 export default async function handle(req, res) {
 
-  // Apply the CORS middleware
-  // cors(corsOptions)(req, res);
 
   const { method } = req;
   await mongooseConnect();
   // await isAdminRequest(req,res);
 
   if (method === 'GET') {
-    if (req.query?.id) {
-      res.json(await Product.findOne({ _id: req.query.id }));
+    if (req.query?.category) {
+      const categoryQuery = req.query.category; // Assuming the category name is passed as a query parameter
+
+      // Find the category by its name (if it exists)
+      const category = await Category.findOne({ name: categoryQuery });
+      const categoryName = category.name;
+      console.log(category, "CATNAME");
+      console.log(categoryName);
+      if (category) {
+        // If the category exists, filter products by that category
+        const filter = { categories: category._id };
+        console.log(filter, "FILTER");
+        const products = await Product.find(filter).populate('categories');
+        res.json(products);
+      } else {
+        // Handle the case where the specified category doesn't exist
+        res.status(404).json({ error: 'Category not found' });
+      }
     } else {
-      res.json(await Product.find());
+      // If no category name is specified, return all products
+      const products = await Product.find().populate("categories");
+      res.json(products);
     }
   }
 
+
   if (method === 'POST') {
-    const { title, description, price, images, category, properties } = req.body;
+    const { title, shortDescription, fullDescription, categories, cardImage, images, country, size, usage, purpose, material, yearCreated, price, discountedPrice, hasDiscount } = req.body;
+
     const productDoc = await Product.create({
-      title, description, price, images, category, properties,
+      title, shortDescription, fullDescription, categories, cardImage, images, country, size, usage, purpose, material, yearCreated, price, discountedPrice, hasDiscount
     });
     res.json(productDoc);
   }
 
   if (method === 'PUT') {
-    const { title, description, price, images, category, properties, _id } = req.body;
-    await Product.updateOne({ _id }, { title, description, price, images, category, properties });
+    const { title, shortDescription, fullDescription, categories, cardImage, images, country, size, usage, purpose, material, yearCreated, price, discountedPrice, hasDiscount, _id } = req.body;
+
+    await Product.updateOne({ _id }, { title, shortDescription, fullDescription, categories, cardImage, images, country, size, usage, purpose, material, yearCreated, price, discountedPrice, hasDiscount });
     res.json(true);
   }
 
