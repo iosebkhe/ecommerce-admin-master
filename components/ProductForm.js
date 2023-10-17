@@ -127,17 +127,21 @@ export default function ProductForm({
         return [...oldImages, ...res.data.links];
       });
       setCardImage(oldCardImages => {
-        return [...oldCardImages, ...res.data.links];
+        return [...oldCardImages, ...res.data.links].join("");
       });
+      if (images.length > 0 || cardImage.length > 0) {
+        setCardImage(images.find(img => img[0]));
+      }
       setIsUploading(false);
       setIsCardImageUploading(false);
     }
   }
 
+  // console.log(cardImage);
 
   function updateImagesOrder(images) {
     // Set the first element of the sortedImages as the cardImage
-    if (images.length > 0) {
+    if (images.length > 0 || cardImage.length > 0) {
       setCardImage(images.find(img => img[0]));
     }
     setImages(images);
@@ -179,8 +183,8 @@ export default function ProductForm({
       </label>
       <div className="mb-2 flex flex-wrap gap-1">
         {images.length > 0 &&
-          <div key={images[0]} className="h-24 bg-white p-4 shadow-sm rounded-sm border border-gray-200">
-            <img src={images[0]} alt="" className="rounded-lg" />
+          <div className="h-24 bg-white p-4 shadow-sm rounded-sm border border-gray-200">
+            <img src={cardImage} alt="" className="rounded-lg" />
           </div>}
         {isCardImageUploading && (
           <div className="h-24 flex items-center">
