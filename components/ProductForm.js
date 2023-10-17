@@ -126,9 +126,9 @@ export default function ProductForm({
       setImages(oldImages => {
         return [...oldImages, ...res.data.links];
       });
-      setCardImage(oldCardImages => {
-        return [...oldCardImages, ...res.data.links][0];
-      });
+      // setCardImage(oldCardImages => {
+      //   return [...oldCardImages, ...res.data.links];
+      // });
       setIsUploading(false);
       setIsCardImageUploading(false);
     }
@@ -136,9 +136,12 @@ export default function ProductForm({
 
 
   function updateImagesOrder(images) {
+    // Set the first element of the sortedImages as the cardImage
+    if (images.length > 0) {
+      setCardImage(images.find(img => img[0]));
+    }
     setImages(images);
   }
-
 
   return (
     <form onSubmit={saveProduct}>
