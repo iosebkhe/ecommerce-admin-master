@@ -9,12 +9,16 @@ export default function EditProductPage() {
   const prId = router.query.id?.[0];
 
   const [productInfo, setProductInfo] = useState(null);
+  const [categories, setCategories] = useState([]); // Initialize categories state
 
   useEffect(() => {
     if (prId) {
-      axios.get(`/api/products?id=${prId}`).then(response => {
-        const product = response.data.find(product => product._id === prId);
+      axios.get(`/api/products?id=${prId}`).then((response) => {
+        const product = response.data.find((product) => product._id === prId);
         setProductInfo(product);
+
+        // Initialize categories state with the product's category IDs
+        setCategories(product.categories.map((category) => category._id));
       });
     }
   }, [prId]);
@@ -22,7 +26,8 @@ export default function EditProductPage() {
   return (
     <Layout>
       <h1>Edit product</h1>
-      {productInfo && <ProductForm {...productInfo} assignedCategories={productInfo.categories} />}
+      {productInfo && <ProductForm {...productInfo} categories={categories} />}
     </Layout>
   );
 }
+

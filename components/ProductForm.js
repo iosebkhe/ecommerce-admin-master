@@ -27,7 +27,14 @@ export default function ProductForm({
   const [title, setTitle] = useState(existingTitle || '');
   const [shortDescription, setShortDescription] = useState(existingShortDescription || "");
   const [fullDescription, setFullDescription] = useState(existingFullDescription || "");
-  const [categories, setCategories] = useState(assignedCategories || []);
+  // const [categories, setCategories] = useState(assignedCategories || []);
+  const [categories, setCategories] = useState(() => {
+    if (assignedCategories) {
+      return assignedCategories;
+    } else {
+      return [];
+    }
+  });
   const [cardImage, setCardImage] = useState(existingCardImage || "");
   const [images, setImages] = useState(existingImages || []);
   const [country, setCountry] = useState(existingCountry || "");
@@ -53,19 +60,26 @@ export default function ProductForm({
   }, []);
 
   const handleCategoryChange = (categoryId) => {
-    if (categories.includes(categoryId)) {
+    // Find the category object based on the categoryId
+    const category = fetchedCategories.find((cat) => cat._id === categoryId);
+
+    if (!category) {
+      // Handle the case where the category is not found (optional)
+      console.error('Category not found:', categoryId);
+      return;
+    }
+
+    if (categories.find((cat) => cat._id === categoryId)) {
       // Category is already selected, so remove it
       setCategories((prevCategories) =>
-        prevCategories.filter((id) => id !== categoryId)
+        prevCategories.filter((cat) => cat._id !== categoryId)
       );
     } else {
       // Category is not selected, so add it
-      setCategories([...categories, categoryId]);
+      setCategories([...categories, category]);
     }
   };
-
-
-
+  console.log(categories);
 
   async function saveProduct(ev) {
     ev.preventDefault();
@@ -138,6 +152,7 @@ export default function ProductForm({
       <label className="my-3 inline-block">კატეგორიები</label>
       <div className="grid grid-cols-4 gap-2 p-3 shadow-lg max-h-32 overflow-auto mb-5">
         {fetchedCategories.map((category) => (
+
           <div key={category._id}>
             <label className="flex items-center gap-1 text-base">
               {category.name}
@@ -145,9 +160,11 @@ export default function ProductForm({
                 className="w-auto p-0 m-0"
                 type="checkbox"
                 value={category._id}
-                checked={categories.includes(category._id)}
-                onChange={(ev) => handleCategoryChange(ev.target.value)}
+                // checked={categories.includes(category._id)}
+                defaultChecked={categories.includes(category._id)}
+                onChange={(ev) => handleCategoryChange(category._id)}
               />
+              {/* {console.log(category._id)} */}
             </label>
           </div>
         ))}
