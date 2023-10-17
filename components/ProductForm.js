@@ -44,7 +44,7 @@ export default function ProductForm({
   const [material, setMaterial] = useState(existingMaterial || "");
   const [yearCreated, setYearCreated] = useState(existingYearCreated || "");
   const [price, setPrice] = useState(existingPrice || '');
-  const [discountedPrice, setDiscountedPrice] = useState(existingDiscountedPrice || null);
+  const [discountedPrice, setDiscountedPrice] = useState(existingDiscountedPrice || "");
   const [hasDiscount, setHasDiscount] = useState(existingHasDiscount || false);
 
   const [goToProducts, setGoToProducts] = useState(false);
@@ -79,7 +79,6 @@ export default function ProductForm({
       setCategories([...categories, category]);
     }
   };
-  console.log(categories);
 
   async function saveProduct(ev) {
     ev.preventDefault();
@@ -140,6 +139,7 @@ export default function ProductForm({
     setImages(images);
   }
 
+
   return (
     <form onSubmit={saveProduct}>
       <label className="mb-3 inline-block">პროდუქტის სახელი</label>
@@ -161,10 +161,9 @@ export default function ProductForm({
                 type="checkbox"
                 value={category._id}
                 // checked={categories.includes(category._id)}
-                defaultChecked={categories.includes(category._id)}
+                defaultChecked={categories.find((cat) => cat._id === category._id)}
                 onChange={(ev) => handleCategoryChange(category._id)}
               />
-              {/* {console.log(category._id)} */}
             </label>
           </div>
         ))}
@@ -253,7 +252,12 @@ export default function ProductForm({
               className="w-auto m-0 p-0"
               type="checkbox"
               checked={hasDiscount}
-              onChange={ev => setHasDiscount(ev.target.checked)}
+              onChange={(ev) => {
+                setHasDiscount(ev.target.checked);
+                if (!ev.target.checked) {
+                  setDiscountedPrice(''); // Reset to an empty string when unchecked
+                }
+              }}
             />
           </div>
 
@@ -331,6 +335,7 @@ export default function ProductForm({
 
           <label className="mb-3 inline-block">დამზადების წელი</label>
           <input
+            type="number"
             placeholder="დამზადების წელი"
             value={yearCreated}
             onChange={ev => setYearCreated(ev.target.value)}

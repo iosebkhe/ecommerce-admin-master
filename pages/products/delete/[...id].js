@@ -21,7 +21,7 @@ export default function DeleteProductPage() {
     router.push('/products');
   }
   async function deleteProduct() {
-    await axios.delete('/api/products?id=' + id);
+    await axios.delete('/api/products?id=' + prId);
     goBack();
   }
   return (

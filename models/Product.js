@@ -56,7 +56,7 @@ const ProductSchema = new Schema({
   },
   discountedPrice: {
     type: Number,
-    default: null
+    default: ""
   },
   hasDiscount: {
     type: Boolean,
