@@ -17,12 +17,9 @@ export default async function handle(req, res) {
       // Find the category by its name (if it exists)
       const category = await Category.findOne({ name: categoryQuery });
       const categoryName = category.name;
-      console.log(category, "CATNAME");
-      console.log(categoryName);
       if (category) {
         // If the category exists, filter products by that category
         const filter = { categories: category._id };
-        console.log(filter, "FILTER");
         const products = await Product.find(filter).populate('categories');
         res.json(products);
       } else {

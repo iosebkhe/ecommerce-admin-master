@@ -64,7 +64,6 @@ export default function ProductForm({
     }
   };
 
-  console.log(categories);
 
 
 
@@ -87,7 +86,6 @@ export default function ProductForm({
       discountedPrice,
       hasDiscount
     };
-    console.log(data);
     if (_id) {
       //update
       await axios.put('/api/products', { ...data, _id });
