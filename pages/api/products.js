@@ -4,8 +4,6 @@ import { mongooseConnect } from "@/lib/mongoose";
 import { isAdminRequest } from "@/pages/api/auth/[...nextauth]";
 
 export default async function handle(req, res) {
-
-
   const { method } = req;
   await mongooseConnect();
   // await isAdminRequest(req,res);
@@ -40,7 +38,6 @@ export default async function handle(req, res) {
     const productDoc = await Product.create({
       title, shortDescription, fullDescription, categories, cardImage, images, country, size, usage, purpose, material, yearCreated, price, discountedPrice, hasDiscount
     });
-
     res.json(productDoc);
   }
 

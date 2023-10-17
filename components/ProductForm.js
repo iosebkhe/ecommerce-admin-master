@@ -126,9 +126,9 @@ export default function ProductForm({
       setImages(oldImages => {
         return [...oldImages, ...res.data.links];
       });
-      // setCardImage(oldCardImages => {
-      //   return [...oldCardImages, ...res.data.links];
-      // });
+      setCardImage(oldCardImages => {
+        return [...oldCardImages, ...res.data.links];
+      });
       setIsUploading(false);
       setIsCardImageUploading(false);
     }
@@ -142,6 +142,8 @@ export default function ProductForm({
     }
     setImages(images);
   }
+
+  console.log(cardImage);
 
   return (
     <form onSubmit={saveProduct}>
