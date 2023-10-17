@@ -22,12 +22,12 @@ export default function ProductForm({
   discountedPrice: existingDiscountedPrice,
   hasDiscount: existingHasDiscount
 }) {
-  const assignedCategoryIds = assignedCategories.map(category => category._id);
+  // const assignedCategoryIds = assignedCategories.map(category => category._id);
 
   const [title, setTitle] = useState(existingTitle || '');
   const [shortDescription, setShortDescription] = useState(existingShortDescription || "");
   const [fullDescription, setFullDescription] = useState(existingFullDescription || "");
-  const [categories, setCategories] = useState(assignedCategoryIds || []);
+  const [categories, setCategories] = useState(assignedCategories || []);
   const [cardImage, setCardImage] = useState(existingCardImage || "");
   const [images, setImages] = useState(existingImages || []);
   const [country, setCountry] = useState(existingCountry || "");
@@ -128,29 +128,32 @@ export default function ProductForm({
 
   return (
     <form onSubmit={saveProduct}>
-      <label>პროდუქტის სახელი</label>
+      <label className="mb-3 inline-block">პროდუქტის სახელი</label>
       <input
         type="text"
         placeholder="პროდუქტის სახელი"
         value={title}
         onChange={ev => setTitle(ev.target.value)} />
 
-      <label>კატეგორიები</label>
-      <div>
+      <label className="my-3 inline-block">კატეგორიები</label>
+      <div className="grid grid-cols-4 gap-2 p-3 shadow-lg max-h-32 overflow-auto mb-5">
         {fetchedCategories.map((category) => (
-          <label key={category._id}>
-            <input
-              type="checkbox"
-              value={category._id}
-              checked={categories.includes(category._id)}
-              onChange={(ev) => handleCategoryChange(ev.target.value)}
-            />
-            {category.name}
-          </label>
+          <div key={category._id}>
+            <label className="flex items-center gap-1 text-base">
+              {category.name}
+              <input
+                className="w-auto p-0 m-0"
+                type="checkbox"
+                value={category._id}
+                checked={categories.includes(category._id)}
+                onChange={(ev) => handleCategoryChange(ev.target.value)}
+              />
+            </label>
+          </div>
         ))}
       </div>
 
-      <label>
+      <label className="mb-3 inline-block">
         მთავარი ფოტო
       </label>
       <div className="mb-2 flex flex-wrap gap-1">
@@ -174,7 +177,7 @@ export default function ProductForm({
         </label>}
       </div>
 
-      <label>
+      <label className="mb-3 inline-block">
         გალერიის ფოტოები
       </label>
       <div className="mb-2 flex flex-wrap gap-1">
@@ -207,7 +210,7 @@ export default function ProductForm({
       <div className="grid grid-cols-2 gap-x-2">
 
         <div>
-          <label>ფასი</label>
+          <label className="mb-3 inline-block">ფასი</label>
           <input
             type="number"
             placeholder="ფასი"
@@ -218,7 +221,7 @@ export default function ProductForm({
 
         <div>
 
-          <label>ქვეყანა</label>
+          <label className="mb-3 inline-block">ქვეყანა</label>
           <input
             placeholder="ქვეყანა"
             value={country}
@@ -228,7 +231,7 @@ export default function ProductForm({
 
         <div className="flex items-center justify-between gap-2">
           <div>
-            <label>ფასდაკლება</label>
+            <label className="mr-2">ფასდაკლება</label>
             <input
               className="w-auto m-0 p-0"
               type="checkbox"
@@ -240,7 +243,7 @@ export default function ProductForm({
 
           {hasDiscount &&
             <div>
-              <label>ფასდაკლებული ფასი</label>
+              <label className="mb-3 inline-block">ფასდაკლებული ფასი</label>
               <input
                 type="number"
                 placeholder="ფასდაკლებული ფასი"
@@ -253,7 +256,7 @@ export default function ProductForm({
 
 
         <div>
-          <label>ზომები</label>
+          <label className="mb-3 inline-block">ზომები</label>
           <input
             placeholder="ზომები"
             value={size}
@@ -262,7 +265,7 @@ export default function ProductForm({
         </div>
 
         <div>
-          <label>მოკლე აღწერა</label>
+          <label className="mb-3 inline-block">მოკლე აღწერა</label>
           <textarea
             placeholder="მოკლე აღწერა"
             value={shortDescription}
@@ -271,7 +274,7 @@ export default function ProductForm({
         </div>
 
         <div>
-          <label>სრული აღწერა</label>
+          <label className="mb-3 inline-block">სრული აღწერა</label>
           <textarea
             placeholder="სრული აღწერა"
             value={fullDescription}
@@ -280,7 +283,7 @@ export default function ProductForm({
         </div>
 
         <div>
-          <label>გამოყენება</label>
+          <label className="mb-3 inline-block">გამოყენება</label>
           <input
             placeholder="გამოყენება"
             value={usage}
@@ -289,7 +292,7 @@ export default function ProductForm({
         </div>
 
         <div>
-          <label>დანიშნულება</label>
+          <label className="mb-3 inline-block">დანიშნულება</label>
           <input
             placeholder="დანიშნულება"
             value={purpose}
@@ -299,7 +302,7 @@ export default function ProductForm({
 
         <div>
 
-          <label>მასალა</label>
+          <label className="mb-3 inline-block">მასალა</label>
           <input
             placeholder="მასალა"
             value={material}
@@ -309,7 +312,7 @@ export default function ProductForm({
 
         <div>
 
-          <label>დამზადების წელი</label>
+          <label className="mb-3 inline-block">დამზადების წელი</label>
           <input
             placeholder="დამზადების წელი"
             value={yearCreated}
